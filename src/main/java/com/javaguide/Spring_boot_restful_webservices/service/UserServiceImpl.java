@@ -55,5 +55,8 @@ public class UserServiceImpl implements UserService{
         return UserMapper.mapToUserDto(updatedUser);
     }
 
-
+    @Override
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
+    }
 }
