@@ -2,6 +2,7 @@ package com.javaguide.Spring_boot_restful_webservices.service;
 
 import com.javaguide.Spring_boot_restful_webservices.dto.UserDto;
 import com.javaguide.Spring_boot_restful_webservices.entity.User;
+import com.javaguide.Spring_boot_restful_webservices.exception.UserNotFoundException;
 import com.javaguide.Spring_boot_restful_webservices.mapper.UserMapper;
 import com.javaguide.Spring_boot_restful_webservices.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -34,8 +35,10 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDto getUserById(Long userid) {
-        Optional<User> optionalUser=userRepository.findById(userid);
-        User user=optionalUser.get();
+        User user=userRepository.findById(userid).orElseThrow(
+                ()->new UserNotFoundException("user","Id",userid)
+        );
+
         return UserMapper.mapToUserDto(user);
     }
 
@@ -47,7 +50,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserDto updateUser(UserDto user) {
-        User existingUser=userRepository.findById(user.getId()).get();
+        User existingUser=userRepository.findById(user.getId()).orElseThrow(
+                ()->new UserNotFoundException("user","id", user.getId())
+        );
         existingUser.setFirstname(user.getFirstname());
         existingUser.setLastname(user.getLastname());
         existingUser.setEmail(user.getEmail());
@@ -57,6 +62,10 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void deleteUser(Long userId) {
+
+        User existingUser=userRepository.findById(userId).orElseThrow(
+                ()->new UserNotFoundException("user","id", userId)
+        );
         userRepository.deleteById(userId);
     }
 }
