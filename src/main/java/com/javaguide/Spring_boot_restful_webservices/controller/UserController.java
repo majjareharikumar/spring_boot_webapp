@@ -2,13 +2,17 @@ package com.javaguide.Spring_boot_restful_webservices.controller;
 
 import com.javaguide.Spring_boot_restful_webservices.dto.UserDto;
 import com.javaguide.Spring_boot_restful_webservices.entity.User;
+import com.javaguide.Spring_boot_restful_webservices.exception.ErrorDetails;
+import com.javaguide.Spring_boot_restful_webservices.exception.UserNotFoundException;
 import com.javaguide.Spring_boot_restful_webservices.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -58,4 +62,16 @@ public class UserController {
 
         return new ResponseEntity<>("User delete Successfully", HttpStatus.OK);
     }
+
+//    @ExceptionHandler(UserNotFoundException.class)
+//    public ResponseEntity<ErrorDetails> handlerUserNotFoundException(UserNotFoundException exception, WebRequest webRequest){
+//        ErrorDetails errorDetails=new ErrorDetails(
+//                LocalDateTime.now(),
+//                exception.getMessage(),
+//                webRequest.getDescription(false),
+//                "USER_NOT_FOUND"
+//        );
+//        return new ResponseEntity<>(errorDetails,HttpStatus.NOT_FOUND);
+//    }
+
 }
